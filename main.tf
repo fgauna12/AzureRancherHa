@@ -4,7 +4,8 @@ provider "azurerm" {
 
 locals {
     app_name = "rancherlabha"
-    resource_group_name = "rg-${local.app_name}-temp-001"
+    environment = "temp"
+    resource_group_name = "rg-${local.app_name}-${local.environment}-001"
 }
 
 resource "azurerm_resource_group" "resource_group" {

@@ -13,3 +13,11 @@ variable "location" {
 variable "vm_admin_username" {
   type = string
 }
+
+variable "mysql_admin_username" {
+  type = string
+}
+
+variable "mysql_admin_password" {
+  type = string
+}
