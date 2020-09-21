@@ -2,11 +2,11 @@ variable "vm_name" {
   type = string
 }
 
-variable "vnet_name" {
+variable "location" {
   type = string
 }
 
-variable "location" {
+variable "environment" {
   type = string
 }
 
@@ -20,4 +20,8 @@ variable "mysql_admin_username" {
 
 variable "mysql_admin_password" {
   type = string
+}
+
+variable "tags" {
+  type = map
 }

@@ -4,20 +4,23 @@ provider "azurerm" {
 
 locals {
     app_name = "rancherlabha"
-    vnet_name = "vnet-${var.environment}-${local.app_name}"
     resource_group_name = "rg-${local.app_name}-${var.environment}-001"
 }
 
 resource "azurerm_resource_group" "resource_group" {
   name     = local.resource_group_name
   location =  var.location
+
+  tags = var.tags
 }
 
 resource "azurerm_virtual_network" "virtual_network" {
-  name                = local.vnet_name
+  name                = "vnet-${var.environment}-${local.app_name}"
   address_space       = ["10.0.0.0/16"]
   location            = var.location
   resource_group_name = azurerm_resource_group.resource_group.name
+
+  tags = var.tags
 }
 
 resource "azurerm_public_ip" "pip" {
@@ -26,6 +29,8 @@ resource "azurerm_public_ip" "pip" {
   resource_group_name     = azurerm_resource_group.resource_group.name
   allocation_method       = "Static"
   idle_timeout_in_minutes = 30  
+
+  tags = var.tags
 }
 
 resource "azurerm_subnet" "main_subnet" {
@@ -36,7 +41,7 @@ resource "azurerm_subnet" "main_subnet" {
 }
 
 resource "azurerm_network_interface" "nic" {
-  name                = "nic-${var.vnet_name}"
+  name                = "nic-vnet-${var.environment}-${local.app_name}"
   location            = var.location
   resource_group_name = azurerm_resource_group.resource_group.name
 
@@ -46,14 +51,18 @@ resource "azurerm_network_interface" "nic" {
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.pip.id
   }  
+
+  tags = var.tags
 }
 
 resource "azurerm_storage_account" "vm_storage_account" {
-  name                     = "st${local.app_name}002"
+  name                     = "st${local.app_name}001"
   resource_group_name      = azurerm_resource_group.resource_group.name
   location                 = azurerm_resource_group.resource_group.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+
+  tags = var.tags
 }
 
 resource "azurerm_linux_virtual_machine" "vm" {
@@ -94,7 +103,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
       host     = self.public_ip_address
       user     = self.admin_username
       private_key = file("~/.ssh/id_rsa")
-    }
-  
+    }  
   }
+
+  tags = var.tags
 }

@@ -24,3 +24,7 @@ $ terraform plan
 $ terraform -auto-approve
 
 ```
+
+## Known Issues
+
+First time you run, you will have to ssh to get added to the trusted hosts list. Then run `terraform apply` again
