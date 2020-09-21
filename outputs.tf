@@ -5,3 +5,7 @@ output "public_ips" {
 output "private_ips" {
     value = azurerm_linux_virtual_machine.vm.private_ip_address
 }
+
+output "mysql_fqdn" {
+    value = azurerm_mysql_server.mysql.fqdn
+}

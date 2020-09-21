@@ -4,8 +4,8 @@ provider "azurerm" {
 
 locals {
     app_name = "rancherlabha"
-    environment = "temp"
-    resource_group_name = "rg-${local.app_name}-${local.environment}-001"
+    vnet_name = "vnet-${var.environment}-${local.app_name}"
+    resource_group_name = "rg-${local.app_name}-${var.environment}-001"
 }
 
 resource "azurerm_resource_group" "resource_group" {
@@ -14,14 +14,14 @@ resource "azurerm_resource_group" "resource_group" {
 }
 
 resource "azurerm_virtual_network" "virtual_network" {
-  name                = var.vnet_name
+  name                = local.vnet_name
   address_space       = ["10.0.0.0/16"]
   location            = var.location
   resource_group_name = azurerm_resource_group.resource_group.name
 }
 
 resource "azurerm_public_ip" "pip" {
-  name                    = "pip-${local.app_name}--dev"
+  name                    = "pip-${local.app_name}-${var.environment}"
   location                = azurerm_resource_group.resource_group.location
   resource_group_name     = azurerm_resource_group.resource_group.name
   allocation_method       = "Static"

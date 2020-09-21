@@ -1,5 +1,5 @@
 
-resource "azurerm_mysql_server" "my_sql" {
+resource "azurerm_mysql_server" "mysql" {
   name                = "mysql-${local.app_name}-${local.environment}"
   location            = var.location
   resource_group_name = azurerm_resource_group.resource_group.name

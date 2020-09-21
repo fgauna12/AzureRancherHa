@@ -1,4 +1,5 @@
 vm_name = "vmrancherlab"
-vnet_name = "vnet-dev-rancherlab"
+environment = "temp"
 location = "eastus"
 vm_admin_username = "adminuser"
+mysql_admin_username = "adminuser"
