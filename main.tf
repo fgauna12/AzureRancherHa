@@ -3,8 +3,8 @@ provider "azurerm" {
 }
 
 locals {
-    app_name = "rancherlab"
-    resource_group_name = "rg-${local.app_name}-temp-003"
+    app_name = "rancherlabha"
+    resource_group_name = "rg-${local.app_name}-temp-001"
 }
 
 resource "azurerm_resource_group" "resource_group" {
@@ -40,13 +40,11 @@ resource "azurerm_network_interface" "nic" {
   resource_group_name = azurerm_resource_group.resource_group.name
 
   ip_configuration {
-    name                          = "internal" #not really internal just don't want to rename because it won't let me. i'd have delete and recreate
+    name                          = "public" 
     subnet_id                     = azurerm_subnet.main_subnet.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.pip.id
-  }
-
-  
+  }  
 }
 
 resource "azurerm_storage_account" "vm_storage_account" {
