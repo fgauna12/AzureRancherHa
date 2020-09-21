@@ -1,5 +1,13 @@
+terraform {
+  required_providers {
+    azurerm = {
+      version = "= 2.23"
+    }
+  }
+}
+
 provider "azurerm" {
-    features {}
+  features {}
 }
 
 locals {
@@ -103,7 +111,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
       host     = self.public_ip_address
       user     = self.admin_username
       private_key = file("~/.ssh/id_rsa")
-    }  
+    }
+  
   }
 
   tags = var.tags
