@@ -28,3 +28,6 @@ $ terraform -auto-approve
 ## Known Issues
 
 First time you run, you will have to ssh to get added to the trusted hosts list. Then run `terraform apply` again
+
+Have to manually (portal) add a firewall rule to the database to allow traffic from the subnet. Also will force you to add a service endpoint from the subnet.
+

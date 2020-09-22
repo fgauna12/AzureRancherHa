@@ -46,7 +46,9 @@ resource "azurerm_subnet" "main_subnet" {
   name                 = "subnet1"
   resource_group_name  = azurerm_resource_group.resource_group.name
   virtual_network_name = azurerm_virtual_network.virtual_network.name
-  address_prefix       = "10.0.2.0/24"
+  address_prefix       = "10.0.2.0/24" 
+
+  service_endpoints = ["Microsoft.Sql"]
 }
 
 resource "azurerm_network_interface" "nic" {
@@ -77,7 +79,7 @@ resource "azurerm_storage_account" "vm_storage_account" {
 data "template_file" "cloud_init" {
   template = file("./cloud-init.tmpl.yaml")
   vars = {
-    mysql_connection_string = "mysql://${var.mysql_admin_username}@${azurerm_mysql_server.mysql.name}:${var.mysql_admin_password}@tcp(${azurerm_mysql_server.mysql.fqdn}:3306)/${local.database_name}"
+    mysql_connection_string = "mysql://${var.mysql_admin_username}@${azurerm_mysql_server.mysql.name}:${var.mysql_admin_password}@tcp(${azurerm_mysql_server.mysql.fqdn}:3306)/${local.database_name}?tls=true"
   }
 }
 
