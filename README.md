@@ -21,13 +21,21 @@ $ terraform init
 
 $ terraform plan
 
-$ terraform -auto-approve
+$ terrafom apply
 
 ```
+
+See known issues below for MYSQL firewall
+
+Download the kubeconfig file to your workstation.
+
+scp adminuser@[ip address]:/etc/rancher/k3s/k3s.yaml ~/.kube/config
+
 
 ## Known Issues
 
 First time you run, you will have to ssh to get added to the trusted hosts list. Then run `terraform apply` again
 
 Have to manually (portal) add a firewall rule to the database to allow traffic from the subnet. Also will force you to add a service endpoint from the subnet.
+
 

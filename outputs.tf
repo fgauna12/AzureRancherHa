@@ -9,3 +9,11 @@ output "private_ips" {
 output "mysql_fqdn" {
     value = azurerm_mysql_server.mysql.fqdn
 }
+
+output "public_ips2" {
+    value = azurerm_linux_virtual_machine.vm2.public_ip_address
+}
+
+output "private_ips2" {
+    value = azurerm_linux_virtual_machine.vm2.private_ip_address
+}

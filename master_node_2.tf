@@ -1,14 +1,5 @@
-# this apparently got deprecated recently
-data "template_file" "cloud_init" {
-  template = file("./cloud-init.tmpl.yaml")
-  vars = {
-    mysql_connection_string = "mysql://${var.mysql_admin_username}@${azurerm_mysql_server.mysql.name}:${var.mysql_admin_password}@tcp(${azurerm_mysql_server.mysql.fqdn}:3306)/${local.database_name}?tls=true"
-    rancher_hostname = "[load balancer ip here/hostname]"
-  }
-}
-
-resource "azurerm_network_interface" "nic" {
-  name                = "nic-vnet-${var.environment}-${local.app_name}"
+resource "azurerm_network_interface" "nic2" {
+  name                = "nic-vnet-${var.environment}-${local.app_name}2"
   location            = var.location
   resource_group_name = azurerm_resource_group.resource_group.name
 
@@ -16,14 +7,14 @@ resource "azurerm_network_interface" "nic" {
     name                          = "public" 
     subnet_id                     = azurerm_subnet.main_subnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.pip.id
+    public_ip_address_id          = azurerm_public_ip.pip2.id
   }  
 
   tags = var.tags
 }
 
-resource "azurerm_public_ip" "pip" {
-  name                    = "pip-${local.app_name}-${var.environment}"
+resource "azurerm_public_ip" "pip2" {
+  name                    = "pip-${local.app_name}2-${var.environment}"
   location                = azurerm_resource_group.resource_group.location
   resource_group_name     = azurerm_resource_group.resource_group.name
   allocation_method       = "Static"
@@ -32,15 +23,16 @@ resource "azurerm_public_ip" "pip" {
   tags = var.tags
 }
 
-resource "azurerm_linux_virtual_machine" "vm" {
-  name                = var.vm_name
+resource "azurerm_linux_virtual_machine" "vm2" {
+  name                = "${var.vm_name}2"
   resource_group_name = azurerm_resource_group.resource_group.name
   location            = var.location
   size                = "Standard_DS2_v2"
   admin_username      = var.vm_admin_username
   network_interface_ids = [
-    azurerm_network_interface.nic.id,
+    azurerm_network_interface.nic2.id,
   ]
+
   custom_data = base64encode(data.template_file.cloud_init.rendered)
   availability_set_id = azurerm_availability_set.availability_set.id
 
