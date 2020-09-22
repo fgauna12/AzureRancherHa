@@ -21,3 +21,11 @@ resource "azurerm_mysql_server" "mysql" {
 
   tags = var.tags
 }
+
+resource "azurerm_mysql_database" "database" {
+  name                = local.database_name
+  resource_group_name = azurerm_resource_group.resource_group.name
+  server_name         = azurerm_mysql_server.mysql.name
+  charset             = "utf8"
+  collation           = "utf8_unicode_ci"
+}

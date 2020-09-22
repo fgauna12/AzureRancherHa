@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     azurerm = {
-      version = "= 2.23"
+      version = "~> 2.23"
     }
   }
 }
@@ -12,6 +12,7 @@ provider "azurerm" {
 
 locals {
     app_name = "rancherlabha"
+    database_name = "rancher"
     resource_group_name = "rg-${local.app_name}-${var.environment}-001"
 }
 
@@ -73,6 +74,13 @@ resource "azurerm_storage_account" "vm_storage_account" {
   tags = var.tags
 }
 
+data "template_file" "cloud_init" {
+  template = file("./cloud-init.tmpl.yaml")
+  vars = {
+    mysql_connection_string = "mysql://${var.mysql_admin_username}@${azurerm_mysql_server.mysql.name}:${var.mysql_admin_password}@tcp(${azurerm_mysql_server.mysql.fqdn}:3306)/${local.database_name}"
+  }
+}
+
 resource "azurerm_linux_virtual_machine" "vm" {
   name                = var.vm_name
   resource_group_name = azurerm_resource_group.resource_group.name
@@ -82,6 +90,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   network_interface_ids = [
     azurerm_network_interface.nic.id,
   ]
+  custom_data = base64encode(data.template_file.cloud_init.rendered)
 
   boot_diagnostics {
     storage_account_uri = azurerm_storage_account.vm_storage_account.primary_blob_endpoint
@@ -102,17 +111,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
     offer     = "UbuntuServer"
     sku       = "18.04-LTS"
     version   = "latest"
-  }
-
-  provisioner "remote-exec" {
-    script = "./init.sh"
-
-    connection {
-      host     = self.public_ip_address
-      user     = self.admin_username
-      private_key = file("~/.ssh/id_rsa")
-    }
-  
   }
 
   tags = var.tags
