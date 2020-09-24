@@ -34,3 +34,7 @@ variable "rancher_hostname" {
 variable "vm_admin_username" {
   type = string
 }
+
+variable "instances" {
+  type = number
+}

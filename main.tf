@@ -48,6 +48,7 @@ module "web_tier" {
   location                   = var.location
   database_connection_string = "mysql://${var.mysql_admin_username}@${module.mysql.server_name}:${var.mysql_admin_password}@tcp(${module.mysql.fqdn}:3306)/${local.database_name}?tls=true"
   rancher_hostname           = "tbd"
+  instances                  = 2
 
   vm_admin_username = var.vm_admin_username
 }
