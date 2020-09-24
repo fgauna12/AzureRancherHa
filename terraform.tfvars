@@ -1,4 +1,3 @@
-vm_name = "vmrancherlab"
 environment = "temp"
 location = "eastus"
 vm_admin_username = "adminuser"
