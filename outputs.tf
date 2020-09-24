@@ -1,19 +1,19 @@
 output "public_ips" {
-    value = azurerm_linux_virtual_machine.vm.public_ip_address
+    value = module.web_tier.public_ips
 }
 
 output "private_ips" {
-    value = azurerm_linux_virtual_machine.vm.private_ip_address
+    value = module.web_tier.private_ips
 }
 
 output "mysql_fqdn" {
-    value = azurerm_mysql_server.mysql.fqdn
+    value = module.mysql.fqdn
 }
 
 output "public_ips2" {
-    value = azurerm_linux_virtual_machine.vm2.public_ip_address
+    value = module.web_tier.public_ips2
 }
 
 output "private_ips2" {
-    value = azurerm_linux_virtual_machine.vm2.private_ip_address
+    value = module.web_tier.private_ips2
 }

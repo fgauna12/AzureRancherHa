@@ -11,42 +11,43 @@ provider "azurerm" {
 }
 
 locals {
-    app_name = "rancherlabha"
-    database_name = "rancher"
-    resource_group_name = "rg-${local.app_name}-${var.environment}-001"
+  app_name      = "rancher"
+  database_name = "rancher"
+  location      = "eastus"
+  environment   = "prod"
 }
 
 resource "azurerm_resource_group" "resource_group" {
-  name     = local.resource_group_name
-  location =  var.location
+  name     = "rg-${local.app_name}-${var.environment}-001"
+  location = var.location
 
   tags = var.tags
 }
 
-resource "azurerm_virtual_network" "virtual_network" {
-  name                = "vnet-${var.environment}-${local.app_name}"
-  address_space       = ["10.0.0.0/16"]
-  location            = var.location
-  resource_group_name = azurerm_resource_group.resource_group.name
+module "mysql" {
+  source = "./modules/mysql"
+
+  server_name          = local.app_name
+  database_name        = local.database_name
+  resource_group       = azurerm_resource_group.resource_group.name
+  environment          = var.environment
+  location             = var.location
+  mysql_admin_username = var.mysql_admin_username
+  mysql_admin_password = var.mysql_admin_password
 
   tags = var.tags
 }
 
-resource "azurerm_subnet" "main_subnet" {
-  name                 = "subnet1"
-  resource_group_name  = azurerm_resource_group.resource_group.name
-  virtual_network_name = azurerm_virtual_network.virtual_network.name
-  address_prefix       = "10.0.2.0/24" 
+module "web_tier" {
+  source = "./modules/web_tier"
 
-  service_endpoints = ["Microsoft.Sql"]
-}
+  tags                       = var.tags
+  app_name                   = local.app_name
+  resource_group             = azurerm_resource_group.resource_group.name
+  environment                = var.environment
+  location                   = var.location
+  database_connection_string = "mysql://${var.mysql_admin_username}@${module.mysql.server_name}:${var.mysql_admin_password}@tcp(${module.mysql.fqdn}:3306)/${local.database_name}?tls=true"
+  rancher_hostname           = "tbd"
 
-resource "azurerm_storage_account" "vm_storage_account" {
-  name                     = "st${local.app_name}001"
-  resource_group_name      = azurerm_resource_group.resource_group.name
-  location                 = azurerm_resource_group.resource_group.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-
-  tags = var.tags
+  vm_admin_username = var.vm_admin_username
 }

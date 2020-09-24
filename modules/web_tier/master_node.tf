@@ -2,15 +2,15 @@
 data "template_file" "cloud_init" {
   template = file("./cloud-init.tmpl.yaml")
   vars = {
-    mysql_connection_string = "mysql://${var.mysql_admin_username}@${azurerm_mysql_server.mysql.name}:${var.mysql_admin_password}@tcp(${azurerm_mysql_server.mysql.fqdn}:3306)/${local.database_name}?tls=true"
-    rancher_hostname = "[load balancer ip here/hostname]"
+    connection_string = var.database_connection_string
+    rancher_hostname = var.rancher_hostname
   }
 }
 
 resource "azurerm_network_interface" "nic" {
-  name                = "nic-vnet-${var.environment}-${local.app_name}"
+  name                = "nic-vnet-${var.environment}-${var.app_name}"
   location            = var.location
-  resource_group_name = azurerm_resource_group.resource_group.name
+  resource_group_name = var.resource_group
 
   ip_configuration {
     name                          = "public" 
@@ -23,9 +23,9 @@ resource "azurerm_network_interface" "nic" {
 }
 
 resource "azurerm_public_ip" "pip" {
-  name                    = "pip-${local.app_name}-${var.environment}"
-  location                = azurerm_resource_group.resource_group.location
-  resource_group_name     = azurerm_resource_group.resource_group.name
+  name                    = "pip-${var.app_name}-${var.environment}"
+  location                = var.location
+  resource_group_name     = var.resource_group
   allocation_method       = "Static"
   idle_timeout_in_minutes = 30  
 
@@ -33,8 +33,8 @@ resource "azurerm_public_ip" "pip" {
 }
 
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = var.vm_name
-  resource_group_name = azurerm_resource_group.resource_group.name
+  name                = local.vm_name
+  resource_group_name = var.resource_group
   location            = var.location
   size                = "Standard_DS2_v2"
   admin_username      = var.vm_admin_username
@@ -43,10 +43,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
   ]
   custom_data = base64encode(data.template_file.cloud_init.rendered)
   availability_set_id = azurerm_availability_set.availability_set.id
-
-  boot_diagnostics {
-    storage_account_uri = azurerm_storage_account.vm_storage_account.primary_blob_endpoint
-  }
 
   admin_ssh_key {
     username   = var.vm_admin_username

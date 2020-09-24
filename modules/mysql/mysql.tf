@@ -1,8 +1,8 @@
 
 resource "azurerm_mysql_server" "mysql" {
-  name                = "mysql-${local.app_name}-${var.environment}"
+  name                = "mysql-${var.server_name}-${var.environment}"
   location            = var.location
-  resource_group_name = azurerm_resource_group.resource_group.name
+  resource_group_name = var.resource_group
 
   administrator_login          = var.mysql_admin_username
   administrator_login_password = var.mysql_admin_password
@@ -23,8 +23,8 @@ resource "azurerm_mysql_server" "mysql" {
 }
 
 resource "azurerm_mysql_database" "database" {
-  name                = local.database_name
-  resource_group_name = azurerm_resource_group.resource_group.name
+  name                = var.database_name
+  resource_group_name = var.resource_group
   server_name         = azurerm_mysql_server.mysql.name
   charset             = "utf8"
   collation           = "utf8_unicode_ci"

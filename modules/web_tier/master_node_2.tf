@@ -1,7 +1,7 @@
 resource "azurerm_network_interface" "nic2" {
-  name                = "nic-vnet-${var.environment}-${local.app_name}2"
+  name                = "nic-vnet-${var.environment}-${var.app_name}2"
   location            = var.location
-  resource_group_name = azurerm_resource_group.resource_group.name
+  resource_group_name = var.resource_group
 
   ip_configuration {
     name                          = "public" 
@@ -14,9 +14,9 @@ resource "azurerm_network_interface" "nic2" {
 }
 
 resource "azurerm_public_ip" "pip2" {
-  name                    = "pip-${local.app_name}2-${var.environment}"
-  location                = azurerm_resource_group.resource_group.location
-  resource_group_name     = azurerm_resource_group.resource_group.name
+  name                    = "pip-${var.app_name}2-${var.environment}"
+  location                = var.location
+  resource_group_name     = var.resource_group
   allocation_method       = "Static"
   idle_timeout_in_minutes = 30  
 
@@ -24,8 +24,8 @@ resource "azurerm_public_ip" "pip2" {
 }
 
 resource "azurerm_linux_virtual_machine" "vm2" {
-  name                = "${var.vm_name}2"
-  resource_group_name = azurerm_resource_group.resource_group.name
+  name                = "${local.vm_name}2"
+  resource_group_name = var.resource_group
   location            = var.location
   size                = "Standard_DS2_v2"
   admin_username      = var.vm_admin_username
@@ -35,10 +35,6 @@ resource "azurerm_linux_virtual_machine" "vm2" {
 
   custom_data = base64encode(data.template_file.cloud_init.rendered)
   availability_set_id = azurerm_availability_set.availability_set.id
-
-  boot_diagnostics {
-    storage_account_uri = azurerm_storage_account.vm_storage_account.primary_blob_endpoint
-  }
 
   admin_ssh_key {
     username   = var.vm_admin_username
