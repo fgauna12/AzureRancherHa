@@ -11,10 +11,12 @@ provider "azurerm" {
 }
 
 locals {
-  app_name      = "rancher"
-  database_name = "rancher"
-  location      = "eastus"
-  environment   = "prod"
+  app_name          = "rancher"
+  mysql_server_name = local.app_name
+  database_name     = "rancher"
+  location          = "eastus"
+  environment       = "prod"
+  rancher_subnet_cidr = "10.0.2.0/24"
 }
 
 resource "azurerm_resource_group" "resource_group" {
@@ -27,13 +29,12 @@ resource "azurerm_resource_group" "resource_group" {
 module "virtual_network" {
   source = "./modules/virtual_network"
 
-  app_name            = local.app_name
-  mysql_server_name   = local.app_name
+  app_name            = local.app_name  
   resource_group      = azurerm_resource_group.resource_group.name
   environment         = var.environment
   location            = var.location
   address_space       = "10.0.0.0/16"
-  rancher_subnet_cidr = "10.0.2.0/24"
+  rancher_subnet_cidr = local.rancher_subnet_cidr
 
   tags = var.tags
 }
@@ -71,7 +72,7 @@ module "web_tier" {
 resource "azurerm_mysql_firewall_rule" "mysql_allow_rancher_server" {
   name                = "rancher_server"
   resource_group_name = azurerm_resource_group.resource_group.name
-  server_name         = local.mysql_server_name
-  start_ip_address    = "0.0.0.0"
-  end_ip_address      = "0.0.0.0"
+  server_name         = module.mysql.server_name
+  start_ip_address    = cidrhost("10.0.2.0/24", 1)
+  end_ip_address      = cidrhost("10.0.2.0/24", 254)
 }
