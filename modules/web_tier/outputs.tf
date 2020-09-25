@@ -1,3 +1,3 @@
 output "public_ip" {
-    value = "todo"
+    value = azurerm_public_ip.pip_lb.ip_address
 }

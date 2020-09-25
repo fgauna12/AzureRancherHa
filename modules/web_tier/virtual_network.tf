@@ -11,7 +11,7 @@ resource "azurerm_subnet" "rancher_subnet" {
   name                 = "rancher"
   resource_group_name  = var.resource_group
   virtual_network_name = azurerm_virtual_network.virtual_network.name
-  address_prefix       = "10.0.2.0/24" 
+  address_prefixes     = ["10.0.2.0/24"]
 
   service_endpoints = ["Microsoft.Sql"]
 }
