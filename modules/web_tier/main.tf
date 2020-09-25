@@ -5,7 +5,3 @@ terraform {
     }
   }
 }
-
-locals {
-  vm_name = "vm${var.app_name}001"
-}

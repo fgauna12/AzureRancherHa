@@ -1,5 +1,5 @@
 variable "cloud_init_file" {
-  type = string
+  type    = string
   default = "cloud-init.tmpl.yaml"
 }
 
@@ -37,4 +37,16 @@ variable "vm_admin_username" {
 
 variable "instances" {
   type = number
+}
+
+variable "virtual_network_name" {
+  type = string
+}
+
+variable "rancher_subnet_name" {
+  type = string
+}
+
+variable "virtual_network_resource_group" {
+  type    = string
 }

@@ -1,6 +1,6 @@
 resource "azurerm_virtual_network" "virtual_network" {
-  name                = "vnet-${var.environment}-${var.app_name}"
-  address_space       = ["10.0.0.0/16"]
+  name                = local.virtual_network_name
+  address_space       = [var.address_space]
   location            = var.location
   resource_group_name = var.resource_group
 
@@ -8,10 +8,10 @@ resource "azurerm_virtual_network" "virtual_network" {
 }
 
 resource "azurerm_subnet" "rancher_subnet" {
-  name                 = "rancher"
+  name                 = local.rancher_subnet_name
   resource_group_name  = var.resource_group
   virtual_network_name = azurerm_virtual_network.virtual_network.name
-  address_prefixes     = ["10.0.2.0/24"]
+  address_prefixes     = [var.rancher_subnet_cidr]
 
   service_endpoints = ["Microsoft.Sql"]
 }

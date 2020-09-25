@@ -24,6 +24,19 @@ resource "azurerm_resource_group" "resource_group" {
   tags = var.tags
 }
 
+module "virtual_network" {
+  source = "./modules/virtual_network"
+
+app_name                   = local.app_name
+  resource_group       = azurerm_resource_group.resource_group.name
+  environment          = var.environment
+  location             = var.location
+  address_space = "10.0.0.0/16"
+  rancher_subnet_cidr = "10.0.2.0/24"
+
+  tags = var.tags
+}
+
 module "mysql" {
   source = "./modules/mysql"
 
@@ -49,6 +62,9 @@ module "web_tier" {
   database_connection_string = "mysql://${var.mysql_admin_username}@${module.mysql.server_name}:${var.mysql_admin_password}@tcp(${module.mysql.fqdn}:3306)/${local.database_name}?tls=true"
   rancher_hostname           = var.rancher_hostname
   instances                  = 2
+  virtual_network_name = module.virtual_network.name
+  rancher_subnet_name = module.virtual_network.rancher_subnet_name
+  virtual_network_resource_group = azurerm_resource_group.resource_group.name
 
   vm_admin_username = var.vm_admin_username
 }
