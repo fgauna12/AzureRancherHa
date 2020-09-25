@@ -39,14 +39,6 @@ variable "instances" {
   type = number
 }
 
-variable "virtual_network_name" {
+variable "rancher_subnet_id" {
   type = string
-}
-
-variable "rancher_subnet_name" {
-  type = string
-}
-
-variable "virtual_network_resource_group" {
-  type    = string
 }

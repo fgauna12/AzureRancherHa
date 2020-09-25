@@ -1,9 +1,3 @@
-data "azurerm_subnet" "rancher_subnet" {
-  name                 = var.rancher_subnet_name
-  virtual_network_name = var.virtual_network_name
-  resource_group_name  = var.virtual_network_resource_group
-}
-
 resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   name                = "vmss-${var.app_name}001"
   resource_group_name = var.resource_group
@@ -55,7 +49,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     ip_configuration {
       name                                   = "internal"
       primary                                = true
-      subnet_id                              = data.azurerm_subnet.rancher_subnet.id
+      subnet_id                              = var.rancher_subnet_id
       load_balancer_backend_address_pool_ids = [azurerm_lb_backend_address_pool.backend_pool.id]
     }
   }
