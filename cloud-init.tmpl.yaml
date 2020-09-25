@@ -7,4 +7,4 @@ runcmd:
   - apt-get update
   - curl https://releases.rancher.com/install-docker/18.09.sh | sh
   - sudo usermod -aG docker adminuser
-  - curl -sfL https://get.k3s.io | sh -s - server --datastore-endpoint="${mysql_connection_string}" --tls-san="${rancher_hostname}"
+  - curl -sfL https://get.k3s.io | sh -s - server --datastore-endpoint="${connection_string}" --tls-san="${rancher_hostname}"

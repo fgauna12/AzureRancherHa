@@ -3,6 +3,7 @@ resource "azurerm_public_ip" "pip_lb" {
   location            = var.location
   resource_group_name = var.resource_group
   allocation_method   = "Static"
+  sku = "Standard"
 
   domain_name_label = "rancherlabha"
 
@@ -13,6 +14,8 @@ resource "azurerm_lb" "lb" {
   name                = "lbe-${var.app_name}-${var.environment}"
   location            = var.location
   resource_group_name = var.resource_group
+  sku                 = "Standard"
+
 
   frontend_ip_configuration {
     name                 = "PublicIPAddress"
@@ -22,12 +25,52 @@ resource "azurerm_lb" "lb" {
   tags = var.tags
 }
 
+resource "azurerm_lb_backend_address_pool" "backend_pool" {
+  resource_group_name = var.resource_group
+  loadbalancer_id     = azurerm_lb.lb.id
+  name                = "vmss-backend-address-pool"
+}
+
+resource "azurerm_lb_probe" "http_probe" {
+  resource_group_name = var.resource_group
+  loadbalancer_id     = azurerm_lb.lb.id
+  name                = "http"
+  port                = 80
+  protocol            = "tcp"
+}
+
+resource "azurerm_lb_rule" "http_rule" {
+  resource_group_name            = var.resource_group
+  loadbalancer_id                = azurerm_lb.lb.id
+  name                           = "http-rule"
+  protocol                       = "Tcp"
+  frontend_port                  = 80
+  backend_port                   = 80
+  frontend_ip_configuration_name = "PublicIPAddress"
+  probe_id                       = azurerm_lb_probe.http_probe.id
+  backend_address_pool_id        = azurerm_lb_backend_address_pool.backend_pool.id
+}
+
+
 resource "azurerm_lb_probe" "https_probe" {
   resource_group_name = var.resource_group
   loadbalancer_id     = azurerm_lb.lb.id
   name                = "https"
   port                = 443
-  protocol = "tcp"
+  protocol            = "tcp"
+}
+
+
+resource "azurerm_lb_rule" "https_rule" {
+  resource_group_name            = var.resource_group
+  loadbalancer_id                = azurerm_lb.lb.id
+  name                           = "https-rule"
+  protocol                       = "Tcp"
+  frontend_port                  = 443
+  backend_port                   = 443
+  frontend_ip_configuration_name = "PublicIPAddress"
+  probe_id                       = azurerm_lb_probe.https_probe.id
+  backend_address_pool_id        = azurerm_lb_backend_address_pool.backend_pool.id
 }
 
 resource "azurerm_lb_probe" "kubernetes_api_probe" {
@@ -35,7 +78,7 @@ resource "azurerm_lb_probe" "kubernetes_api_probe" {
   loadbalancer_id     = azurerm_lb.lb.id
   name                = "kubernetes_api_probe"
   port                = 6443
-  protocol = "tcp"
+  protocol            = "tcp"
 }
 
 resource "azurerm_lb_rule" "kubernetes_api_rule" {
@@ -46,5 +89,6 @@ resource "azurerm_lb_rule" "kubernetes_api_rule" {
   frontend_port                  = 6443
   backend_port                   = 6443
   frontend_ip_configuration_name = "PublicIPAddress"
-  probe_id = azurerm_lb_probe.kubernetes_api_probe.id
+  probe_id                       = azurerm_lb_probe.kubernetes_api_probe.id
+  backend_address_pool_id        = azurerm_lb_backend_address_pool.backend_pool.id
 }

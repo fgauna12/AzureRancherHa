@@ -18,6 +18,10 @@ variable "mysql_admin_password" {
   type = string
 }
 
+variable "rancher_hostname" {
+  type = string
+}
+
 variable "tags" {
   type = map
 }

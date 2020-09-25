@@ -7,21 +7,12 @@ resource "azurerm_virtual_network" "virtual_network" {
   tags = var.tags
 }
 
-resource "azurerm_subnet" "main_subnet" {
-  name                 = "subnet1"
+resource "azurerm_subnet" "rancher_subnet" {
+  name                 = "rancher"
   resource_group_name  = var.resource_group
   virtual_network_name = azurerm_virtual_network.virtual_network.name
-  address_prefix       = "10.0.2.0/24" 
+  address_prefixes     = ["10.0.2.0/24"]
 
   service_endpoints = ["Microsoft.Sql"]
 }
 
-resource "azurerm_storage_account" "vm_storage_account" {
-  name                     = "st${var.app_name}001"
-  resource_group_name      = var.resource_group
-  location                 = var.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-
-  tags = var.tags
-}
