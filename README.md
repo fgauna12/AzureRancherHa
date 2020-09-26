@@ -25,8 +25,6 @@ $ terrafom apply
 
 ```
 
-See known issues below for MYSQL firewall
-
 Download the kubeconfig file to your workstation.
 
 Install Rancher server through Helm
