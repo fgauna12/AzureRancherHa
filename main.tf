@@ -66,8 +66,7 @@ module "web_tier" {
   instances                  = 2
   rancher_subnet_id          = module.virtual_network.rancher_subnet_id
   cloud_init_file            = file("./cloud-init.tmpl.yaml")
-
-  vm_admin_username = var.vm_admin_username
+  vm_admin_username          = var.vm_admin_username
 }
 
 resource "azurerm_mysql_firewall_rule" "mysql_allow_rancher_server" {
@@ -76,4 +75,15 @@ resource "azurerm_mysql_firewall_rule" "mysql_allow_rancher_server" {
   server_name         = module.mysql.server_name
   start_ip_address    = cidrhost("10.0.2.0/24", 1)
   end_ip_address      = cidrhost("10.0.2.0/24", 254)
+}
+
+module "bastion" {
+  source = "./modules/bastion"
+
+  tags              = var.tags
+  resource_group    = azurerm_resource_group.resource_group.name
+  vm_admin_username = var.vm_admin_username
+  environment       = var.environment
+  location          = var.location
+  subnet_id         = module.virtual_network.bastion_subnet_id
 }
