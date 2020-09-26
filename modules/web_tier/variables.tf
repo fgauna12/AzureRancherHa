@@ -1,8 +1,3 @@
-variable "cloud_init_file" {
-  type    = string
-  default = "cloud-init.tmpl.yaml"
-}
-
 variable "app_name" {
   type = string
 }
@@ -40,5 +35,9 @@ variable "instances" {
 }
 
 variable "rancher_subnet_id" {
+  type = string
+}
+
+variable "cloud_init_file" {
   type = string
 }

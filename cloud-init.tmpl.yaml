@@ -6,5 +6,5 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 runcmd:
   - apt-get update
   - curl https://releases.rancher.com/install-docker/18.09.sh | sh
-  - sudo usermod -aG docker adminuser
-  - curl -sfL https://get.k3s.io | sh -s - server --datastore-endpoint="${connection_string}" --tls-san="${rancher_hostname}"
+  - sudo usermod -aG docker ${username}
+  - curl -sfL https://get.k3s.io | sh -s - server --datastore-endpoint="${connection_string}" --tls-san="${rancher_hostname}" --tls-san="${rancher_ext_ip}"

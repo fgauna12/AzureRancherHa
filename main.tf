@@ -11,11 +11,11 @@ provider "azurerm" {
 }
 
 locals {
-  app_name          = "rancher"
-  mysql_server_name = local.app_name
-  database_name     = "rancher"
-  location          = "eastus"
-  environment       = "prod"
+  app_name            = "rancher"
+  mysql_server_name   = local.app_name
+  database_name       = "rancher"
+  location            = "eastus"
+  environment         = "prod"
   rancher_subnet_cidr = "10.0.2.0/24"
 }
 
@@ -29,7 +29,7 @@ resource "azurerm_resource_group" "resource_group" {
 module "virtual_network" {
   source = "./modules/virtual_network"
 
-  app_name            = local.app_name  
+  app_name            = local.app_name
   resource_group      = azurerm_resource_group.resource_group.name
   environment         = var.environment
   location            = var.location
@@ -65,6 +65,7 @@ module "web_tier" {
   rancher_hostname           = var.rancher_hostname
   instances                  = 2
   rancher_subnet_id          = module.virtual_network.rancher_subnet_id
+  cloud_init_file            = file("./cloud-init.tmpl.yaml")
 
   vm_admin_username = var.vm_admin_username
 }

@@ -16,3 +16,10 @@ resource "azurerm_subnet" "rancher_subnet" {
   service_endpoints = ["Microsoft.Sql"]
 }
 
+resource "azurerm_subnet" "bastion_subnet" {
+  name                 = local.bastion_subnet_name
+  resource_group_name  = var.resource_group
+  virtual_network_name = azurerm_virtual_network.virtual_network.name
+  address_prefixes     = [var.bastion_subnet_cidr]
+}
+
