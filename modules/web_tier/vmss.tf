@@ -7,6 +7,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   admin_username      = var.vm_admin_username
   upgrade_mode        = "Automatic"
   health_probe_id     = azurerm_lb_probe.http_probe.id
+  custom_data         = base64encode(data.template_file.cloud_init.rendered)
 
   automatic_os_upgrade_policy {
     disable_automatic_rollback  = false
@@ -19,15 +20,15 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   }
 
   rolling_upgrade_policy {
-    max_batch_instance_percent = 50
-    max_unhealthy_instance_percent  = 50
+    max_batch_instance_percent              = 50
+    max_unhealthy_instance_percent          = 50
     max_unhealthy_upgraded_instance_percent = 50
-    pause_time_between_batches = "PT1M"
+    pause_time_between_batches              = "PT1M"
   }
 
   admin_ssh_key {
     username   = var.vm_admin_username
-    public_key = file("~/.ssh/id_rsa.pub")
+    public_key = file("~/.ssh/azure-keys/rancher-lab.pub")
   }
 
   source_image_reference {
@@ -49,7 +50,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     ip_configuration {
       name                                   = "internal"
       primary                                = true
-      subnet_id                              = azurerm_subnet.rancher_subnet.id
+      subnet_id                              = var.rancher_subnet_id
       load_balancer_backend_address_pool_ids = [azurerm_lb_backend_address_pool.backend_pool.id]
     }
   }

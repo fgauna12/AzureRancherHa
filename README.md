@@ -14,6 +14,14 @@ A reference architecture for running Rancher using k3s on Azure with availabilit
 ## Getting Started
 
 ```bash
+$ ssh-keygen \
+    -m PEM \
+    -t rsa \
+    -b 4096 \
+    -C "[some email]" \
+    -f ~/.ssh/azure-keys/rancher-lab \
+    -N [some passphrase]
+
 
 $ export TF_VAR_mysql_admin_password="[SOME PASSWORD]"
 

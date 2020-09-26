@@ -18,26 +18,17 @@ variable "tags" {
   type = map
 }
 
-variable "database_connection_string" {
+variable "address_space" {
   type = string
+  default = "10.0.0.0/16"
 }
 
-variable "rancher_hostname" {
+variable "rancher_subnet_cidr" {
   type = string
+  default = "10.0.2.0/24"
 }
 
-variable "vm_admin_username" {
+variable "bastion_subnet_cidr" {
   type = string
-}
-
-variable "instances" {
-  type = number
-}
-
-variable "rancher_subnet_id" {
-  type = string
-}
-
-variable "cloud_init_file" {
-  type = string
+  default = "10.0.3.0/24"
 }
