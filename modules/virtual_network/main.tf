@@ -9,5 +9,6 @@ terraform {
 locals {
   virtual_network_name = "vnet-${var.environment}-${var.app_name}"
   rancher_subnet_name  = "rancher"
-  bastion_subnet_name  = "AzureBastionSubnet"
+  azure_bastion_subnet_name  = "AzureBastionSubnet"
+  bastion_subnet_name  = "snet-mgnt"
 }
