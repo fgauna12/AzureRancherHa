@@ -2,6 +2,8 @@
 A reference architecture for running Rancher using k3s on Azure with availability zones on Azure.
 The goal is to follow best practices for Azure and Rancher. This architecture assumes a [hub/spoke Rancher](https://rancher.com/docs/rancher/v2.x/en/best-practices/deployment-strategies/) topology.
 
+![Diagram of Rancher using a HA set-up on Azure](docs/rancher_ha_azure.png)
+
 ## Pre-Requisites
 1. Terraform
 2. Azure CLI
