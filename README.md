@@ -20,7 +20,8 @@ The goal is to follow best practices for Azure and Rancher. This architecture as
 - Creates two public IPs - One for the load balancer and one for the bastion box.
 - Uses Azure Standard Load Balancer - Standard load balancer can be associated with an availability zone. 
   - :warning: Standard load balancers are secure by default. Meaning, backend pools will only work if the subnet has an NSG attached.
-- Creates a MySQL server - The MySQL server is used by k3s as the control plane storage in lieu of etcd.
+- Creates a MySQL server - The MySQL server is used by k3s as the control plane storage in lieu of etcd. 
+  - Also creates a firewall rule so that access to the database is only allowed from the virtual network and therefore not from the public internet.
 - Creates a bastion box (aka "jump box") - Admins have to SSH into the bastion box to SSH into the rancher server hosts.
 - Uses Terraform to provision all of it.
 
@@ -66,7 +67,17 @@ After some time, you will see the infracture being created. It will output the P
 
 Go to your DNS provider and add an A record to the public IP.
 
-SSH into the bastion box. From the bastion box, ssh into the worker nodes. 
+SSH into the bastion box. From the bastion box, ssh into one of the control plane nodes. You can get the private IP for one of the nodes by using the Azure portal. Navigate to the _virtual machine scale set_, _click on instance view_, copy the private IP from the top right.
 
-Install Rancher server through Helm. The easiest certificate option is through self-signed certificate with cert-manager but that should only be used in prototype scenarios.
+Once in the node, verify that k3s is running. 
 
+``` bash
+$ systemctl status k3s.service
+```
+
+After some time, the scale set instances should report _Healthy_ too. 
+
+Exit the node. 
+From the bastion box, install kubectl and Helm 3. Install Rancher through the Helm chart. The easiest certificate option is through self-signed certificate with cert-manager but that should only be used in prototype scenarios.
+
+Once Rancher is deployed, after a few minutes you can access the Rancher UI using the public IP or the custom domain.
