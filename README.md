@@ -1,4 +1,7 @@
 # Rancher 2.4+ with High Availability on Azure
+
+:warning: This solution is no longer needed. With Rancher 2.5, you can host Rancher on any managed cluster like AKS. AKS supports availability zones as well.
+
 A reference architecture for running Rancher using k3s on Azure with availability zones on Azure.
 The goal is to follow best practices for Azure and Rancher. This architecture assumes a [hub/spoke Rancher](https://rancher.com/docs/rancher/v2.x/en/best-practices/deployment-strategies/) topology.
 
