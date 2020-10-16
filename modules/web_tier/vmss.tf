@@ -9,23 +9,6 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   health_probe_id     = azurerm_lb_probe.http_probe.id
   custom_data         = base64encode(data.template_file.cloud_init.rendered)
 
-  automatic_os_upgrade_policy {
-    disable_automatic_rollback  = false
-    enable_automatic_os_upgrade = true
-  }
-
-  automatic_instance_repair {
-    enabled      = true
-    grace_period = "PT30M"
-  }
-
-  rolling_upgrade_policy {
-    max_batch_instance_percent              = 50
-    max_unhealthy_instance_percent          = 50
-    max_unhealthy_upgraded_instance_percent = 50
-    pause_time_between_batches              = "PT1M"
-  }
-
   admin_ssh_key {
     username   = var.vm_admin_username
     public_key = file("~/.ssh/azure-keys/rancher-lab.pub")
