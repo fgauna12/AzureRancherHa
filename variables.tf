@@ -25,3 +25,8 @@ variable "rancher_hostname" {
 variable "tags" {
   type = map
 }
+
+variable "zones" {
+  type = list(string)
+  default = ["1", "2"]
+}
