@@ -45,3 +45,8 @@ variable "cloud_init_file" {
 variable "zones" {
   type = list(string)
 }
+
+variable "ssh_public_key_path" {
+  type = string
+  default = "~/.ssh/azure-keys/rancher-lab.pub"
+}

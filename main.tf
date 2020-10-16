@@ -39,7 +39,7 @@ module "virtual_network" {
   rancher_subnet_cidr = local.rancher_subnet_cidr
   bastion_subnet_cidr = local.bastion_subnet_cidr
 
-  tags                = var.tags
+  tags = var.tags
 }
 
 module "mysql" {
@@ -69,9 +69,10 @@ module "web_tier" {
   rancher_subnet_id          = module.virtual_network.rancher_subnet_id
   cloud_init_file            = file("${path.module}/cloud-init.tmpl.yaml")
   vm_admin_username          = var.vm_admin_username
-  zones = var.zones
+  zones                      = var.zones
+  ssh_public_key_path        = var.ssh_public_key_path
 
-  tags                       = var.tags
+  tags = var.tags
 }
 
 
@@ -85,11 +86,12 @@ resource "azurerm_mysql_virtual_network_rule" "mysql_allow_rancher_subnet" {
 module "bastion" {
   source = "./modules/bastion"
 
-  resource_group    = azurerm_resource_group.resource_group.name
-  vm_admin_username = var.vm_admin_username
-  environment       = var.environment
-  location          = var.location
-  subnet_id         = module.virtual_network.bastion_subnet_id
+  resource_group      = azurerm_resource_group.resource_group.name
+  vm_admin_username   = var.vm_admin_username
+  environment         = var.environment
+  location            = var.location
+  subnet_id           = module.virtual_network.bastion_subnet_id
+  ssh_public_key_path = var.ssh_public_key_path
 
-  tags              = var.tags
+  tags = var.tags
 }

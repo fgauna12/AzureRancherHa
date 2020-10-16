@@ -21,3 +21,8 @@ variable "subnet_id" {
 variable "tags" {
   type = map
 }
+
+variable "ssh_public_key_path" {
+  type = string
+  default = "~/.ssh/azure-keys/rancher-lab.pub"
+}
