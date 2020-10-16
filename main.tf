@@ -67,7 +67,7 @@ module "web_tier" {
   rancher_hostname           = var.rancher_hostname
   instances                  = 2
   rancher_subnet_id          = module.virtual_network.rancher_subnet_id
-  cloud_init_file            = file("./cloud-init.tmpl.yaml")
+  cloud_init_file            = file("${path.module}/cloud-init.tmpl.yaml")
   vm_admin_username          = var.vm_admin_username
   zones = var.zones
 
