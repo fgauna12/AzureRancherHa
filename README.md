@@ -84,3 +84,17 @@ Exit the node.
 From the bastion box, install kubectl and Helm 3. Install Rancher through the Helm chart. The easiest certificate option is through self-signed certificate with cert-manager but that should only be used in prototype scenarios.
 
 Once Rancher is deployed, after a few minutes you can access the Rancher UI using the public IP or the custom domain.
+
+
+## Variables
+
+| Variable             | Description                                                                                 | Required | Example                             |
+|----------------------|---------------------------------------------------------------------------------------------|---------:|-------------------------------------|
+| location             | The Azure region to deploy to                                                               |    yes   | `eastus`                            |
+| environment          | The name of the environment. To be used in generating the names of resources via convention |    yes   | `prod`                              |
+| vm_admin_username    | The name of the admin username for the virtual machine scale sets.                          |    yes   | `mycompanyadmin`                    |
+| mysql_admin_username | The name of the MySQL username for the MySQL PaaS database to be used by k3s                |    yes   | `mycompanyadmin`                    |
+| mysql_admin_password | The password of the MySQL admin                                                             |    yes   | `password123`                       |
+| rancher_hostname     | The hostname to be used by Rancher                                                          |    yes   | `rancher.mycompanydomain.com`       |
+| tags                 | A map of the Azure tags to use                                                              |    No    | `{ "department"  = "engineering" }` |
+| zones                | The list of azure availability zones to use                                                 |    No    | `["1", "2"]`                        |

@@ -8,7 +8,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   upgrade_mode        = "Automatic"
   health_probe_id     = azurerm_lb_probe.http_probe.id
   custom_data         = base64encode(data.template_file.cloud_init.rendered)
-
+  zones               = var.zones
   admin_ssh_key {
     username   = var.vm_admin_username
     public_key = file("~/.ssh/azure-keys/rancher-lab.pub")

@@ -41,3 +41,7 @@ variable "rancher_subnet_id" {
 variable "cloud_init_file" {
   type = string
 }
+
+variable "zones" {
+  type = list(string)
+}
