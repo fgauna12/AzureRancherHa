@@ -98,3 +98,4 @@ Once Rancher is deployed, after a few minutes you can access the Rancher UI usin
 | rancher_hostname     | The hostname to be used by Rancher                                                          |    yes   | `rancher.mycompanydomain.com`       |
 | tags                 | A map of the Azure tags to use                                                              |    No    | `{ "department"  = "engineering" }` |
 | zones                | The list of azure availability zones to use                                                 |    No    | `["1", "2"]`                        |
+| ssh_public_key_path  | The key to the SSH public key to use to provision the basion and virtual machine scale sets |    No    | `~/.ssh/azure-keys/rancher-lab`     |

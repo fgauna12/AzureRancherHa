@@ -31,3 +31,8 @@ variable "zones" {
   type = list(string)
   default = ["1", "2"]
 }
+
+variable "ssh_public_key_path" {
+  type = string
+  default = "~/.ssh/azure-keys/rancher-lab.pub"
+}
