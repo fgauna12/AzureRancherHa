@@ -24,6 +24,7 @@ variable "rancher_hostname" {
 
 variable "tags" {
   type = map
+  default = {}
 }
 
 variable "zones" {
