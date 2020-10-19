@@ -91,6 +91,8 @@ Once Rancher is deployed, after a few minutes you can access the Rancher UI usin
 | Variable             | Description                                                                                 | Required | Example                             |
 |----------------------|---------------------------------------------------------------------------------------------|---------:|-------------------------------------|
 | location             | The Azure region to deploy to                                                               |    yes   | `eastus`                            |
+| organization_name    | The name of the company. Will be used to create unique FQDNs for resources like MySQL |    yes   | `mycompany`                              |
+| app_name          | The name of the app. Will default to `rancher` |    No   | `rancher`                              |
 | environment          | The name of the environment. To be used in generating the names of resources via convention |    yes   | `prod`                              |
 | vm_admin_username    | The name of the admin username for the virtual machine scale sets.                          |    yes   | `mycompanyadmin`                    |
 | mysql_admin_username | The name of the MySQL username for the MySQL PaaS database to be used by k3s                |    yes   | `mycompanyadmin`                    |
@@ -99,3 +101,6 @@ Once Rancher is deployed, after a few minutes you can access the Rancher UI usin
 | tags                 | A map of the Azure tags to use                                                              |    No    | `{ "department"  = "engineering" }` |
 | zones                | The list of azure availability zones to use                                                 |    No    | `["1", "2"]`                        |
 | ssh_public_key_path  | The key to the SSH public key to use to provision the basion and virtual machine scale sets |    No    | `~/.ssh/azure-keys/rancher-lab`     |
+| virtual_network_address_space  | The address space of the virtual network to create. A CIDR block. |    No    | `10.0.0.0/16`     |
+| virtual_network_rancher_subnet  | The address space of the rancher subnet. A CIDR block. |    No    | `10.0.2.0/24`     |
+| virtual_network_bastion_subnet  | The address space of the bastion subnet. A CIDR block. |    No    | `10.0.4.0/24`     |

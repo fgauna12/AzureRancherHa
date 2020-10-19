@@ -12,13 +12,13 @@ provider "azurerm" {
 
 locals {
   app_name            = "rancher"
-  mysql_server_name   = local.app_name
+  mysql_server_name   = "${var.organization_name}-${local.app_name}"
   database_name       = "rancher"
   location            = "eastus"
   environment         = "prod"
-  address_space       = "10.0.0.0/16"
-  rancher_subnet_cidr = "10.0.2.0/24"
-  bastion_subnet_cidr = "10.0.4.0/24"
+  address_space       = var.virtual_network_address_space
+  rancher_subnet_cidr = var.virtual_network_rancher_subnet
+  bastion_subnet_cidr = var.virtual_network_bastion_subnet
 }
 
 resource "azurerm_resource_group" "resource_group" {
