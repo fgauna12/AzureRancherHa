@@ -2,6 +2,15 @@ variable "location" {
   type = string
 }
 
+variable "organization_name" {
+  type = string
+}
+
+variable "app_name" {
+  type = string
+  default = "rancher"
+}
+
 variable "environment" {
   type = string
 }

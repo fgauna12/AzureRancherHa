@@ -12,7 +12,7 @@ provider "azurerm" {
 
 locals {
   app_name            = "rancher"
-  mysql_server_name   = local.app_name
+  mysql_server_name   = "${var.organization_name}-${local.app_name}"
   database_name       = "rancher"
   location            = "eastus"
   environment         = "prod"
