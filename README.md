@@ -99,3 +99,6 @@ Once Rancher is deployed, after a few minutes you can access the Rancher UI usin
 | tags                 | A map of the Azure tags to use                                                              |    No    | `{ "department"  = "engineering" }` |
 | zones                | The list of azure availability zones to use                                                 |    No    | `["1", "2"]`                        |
 | ssh_public_key_path  | The key to the SSH public key to use to provision the basion and virtual machine scale sets |    No    | `~/.ssh/azure-keys/rancher-lab`     |
+| virtual_network_address_space  | The address space of the virtual network to create. A CIDR block. |    No    | `10.0.0.0/16`     |
+| virtual_network_rancher_subnet  | The address space of the rancher subnet. A CIDR block. |    No    | `10.0.2.0/24`     |
+| virtual_network_bastion_subnet  | The address space of the bastion subnet. A CIDR block. |    No    | `10.0.4.0/24`     |
