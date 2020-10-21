@@ -5,8 +5,6 @@ resource "azurerm_public_ip" "pip_lb" {
   allocation_method   = "Static"
   sku = "Standard"
 
-  domain_name_label = "rancherlabha"
-
   tags = var.tags
 }
 
