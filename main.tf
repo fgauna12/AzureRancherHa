@@ -6,10 +6,6 @@ terraform {
   }
 }
 
-provider "azurerm" {
-  features {}
-}
-
 locals {
   app_name            = "rancher"
   mysql_server_name   = "${var.organization_name}-${local.app_name}"
