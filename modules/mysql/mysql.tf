@@ -11,10 +11,6 @@ resource "azurerm_mysql_server" "mysql" {
   storage_mb = 5120
   version    = "5.7"
 
-  charset   = "latin1"
-  collation = "latin1_swedish_ci"
-
-
   auto_grow_enabled                 = true
   backup_retention_days             = 7
   geo_redundant_backup_enabled      = true
@@ -30,6 +26,7 @@ resource "azurerm_mysql_database" "database" {
   name                = var.database_name
   resource_group_name = var.resource_group
   server_name         = azurerm_mysql_server.mysql.name
-  charset             = "utf8"
-  collation           = "utf8_unicode_ci"
+  
+  charset   = "latin1"
+  collation = "latin1_swedish_ci"
 }
